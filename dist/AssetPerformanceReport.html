@@ -1,0 +1,1353 @@
+<html>
+
+<head>
+<style type="text/css">
+.inline {
+  background-color: #f7f7f7;
+  border:solid 1px #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+}
+.warning {
+	font-weight: bold;
+}
+.message {
+	font-style: italic;
+}
+.source, .output, .warning, .error, .message {
+	padding: 0 1em;
+  border:solid 1px #F7F7F7;
+}
+.source {
+  background-color: #f5f5f5;
+}
+.left {
+  text-align: left;
+}
+.right {
+  text-align: right;
+}
+.center {
+  text-align: center;
+}
+.hl.num {
+  color: #AF0F91;
+}
+.hl.str {
+  color: #317ECC;
+}
+.hl.com {
+  color: #AD95AF;
+  font-style: italic;
+}
+.hl.opt {
+  color: #000000;
+}
+.hl.std {
+  color: #585858;
+}
+.hl.kwa {
+  color: #295F94;
+  font-weight: bold;
+}
+.hl.kwb {
+  color: #B05A65;
+}
+.hl.kwc {
+  color: #55aa55;
+}
+.hl.kwd {
+  color: #BC5A65;
+  font-weight: bold;
+}
+</style>
+<title>Asset Performance Report</title>
+<!-- <link rel="stylesheet" type="text/css" href="./css/styles.css"> -->
+
+
+<!-- Latest compiled and minified CSS -->
+<!-- do not use bootstrap4 here, otherwise plotly not showing correctly in print mode -->
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"> -->
+
+
+
+<style>
+
+
+
+
+body {
+    max-width: 595px;
+    margin: auto;
+    padding: 1em;
+    padding-top: 0;
+    line-height: 20px;
+    font-size: 12pt;
+    font-family: Archer;
+}
+
+section {
+    position: relative;
+    clear: both;
+}
+
+select {
+    font-size: 1em;
+    border: 1px solid lightblue;
+    border-radius: 2px;
+    padding: 4px;
+    width: 150px;
+    background-position: right 15px top 22px;
+    background-size: 18px 18px;
+}
+
+select:active {
+    border: 1px solid #000;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    background: transparent;
+    width: 100%;
+    height: 0;
+    border: none;
+    border-top: solid 1px #aaa;
+    border-bottom: none;
+    border-top-width: thin;
+    border-top-style: dotted;
+    border-top-color: #999999;
+}
+
+/* h1 {
+    width: auto;
+    display: inline-block;
+    font-family: 'Archer','Archer SSm A','Archer SSm B';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 36px;
+    line-height: 1;
+    color: #fff;
+    margin-top: 20px;
+    padding: .28em .8em .4em 25px;
+} */
+
+h2 {
+    padding-top: 50px;
+    font-size: 1.8em;
+    color: #0DA6C9;
+}
+
+h3 {
+    font-size: 1.4em;
+    color: #0DA6C9;
+}
+
+h4 {
+    font-size: 1.0em;
+    color: #0DA6C9;
+    text-align: center;  /* text-align for the text inside flexbox's div*/
+}
+
+h5 {
+    font-size: 0.9em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+h6 {
+    font-size: 0.8em;
+}
+
+/* a:visited {
+    color: rgb(50%, 0, 50%);
+} */
+
+
+
+blockquote {
+    color: #666666;
+    margin: 0;
+    padding-left: 1em;
+    border-left: 0.5em #EEE solid;
+}
+
+ul {
+    display: inline-block;
+    float: left;
+    vertical-align: top;
+    margin-top: 0;
+}
+
+#header {
+    position: relative;
+}
+
+#header > h1 {
+    position: absolute;
+    top: 10px;
+    left: 5px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    font-size: 30px;
+    color:  #0DA6C9;
+    font-family: 'Archer','Archer SSm A','Archer SSm B';
+    line-height: 1;
+}
+#header > h2 {
+    position: absolute;
+    top: 90px;
+    left: 5px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    font-size: 20px;
+    color: #0DA6C9;
+}
+
+#map {
+    width: 595px;
+    height: 400px;
+}
+
+/* Start Histogram Style*/
+
+.bar rect {
+    fill: steelblue;
+    shape-rendering: crispEdges;
+}
+
+.bar text {
+    fill: #fff;
+    font-size: 12px;
+}
+
+.axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+/* End Histogram Style*/
+
+.img-responsive {
+    max-width: 100%;
+    height: 150px;
+}
+
+.stretch {
+    width: 100%;
+    height: 100%;
+}
+
+.flat-table {
+    display: block;
+    font-family: sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: 115%;
+    overflow: hidden;
+    max-width: 595px;
+}
+table{
+	width: 100%;
+}
+
+.dataTable {
+    width: auto;
+    margin: 0 auto;
+    clear: both;
+    border-collapse: separate;
+    border-spacing: 0;
+    max-width: 595px;
+}
+
+table.dataTable {
+width : auto;
+margin : 0 auto;
+clear : both;
+border-collapse : separate;
+border-spacing : 0;
+max-width : 595px;
+}
+
+th {
+background-color : #539342;
+color : white;
+font-weight : normal;
+padding : 5px 5px;
+text-align : center;
+overflow-wrap : break-word;
+}
+td {
+background-color : rgb(238, 238, 238);
+color : rgb(111, 111, 111);
+padding : 5px 5px;
+}
+
+.container-fluid {
+    width: 100%;
+    height: 100%;
+}
+
+.container {
+    width: 100%;
+}
+
+.caption {
+    text-align: center;
+    margin-bottom: 5px;
+    font-size: 0.8em;
+    padding: 5px;
+    font-weight: bold;
+    width: 75%;
+}
+
+.clear {
+    clear: both;
+}
+
+.h1sub {
+    color: #575757;
+    text-align: center;
+    font-weight: normal;
+    display: block;
+	max-width: 540px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 0 0 0 25px;    
+}
+
+.myplot .legend .traces:nth-of-type(3) .legendtoggle {
+   display: none;
+    }
+.myplot .legend .traces:nth-of-type(3) .legendtext {
+   cursor: default;
+    }
+.container-2 {
+            display: flex;
+                /*
+      justify-content:flex-start;
+      justify-content:flex-end;
+      justify-content:center;
+      justify-content:space-around;
+      */
+            justify-content: space-around;
+            }
+
+.container-2 > div:hover {  /*hover for div  */
+  background-color:Tomato;
+}
+
+.container-2 div {
+         
+         border: 3px rgb(16, 129, 22) solid;
+         padding: 10px;
+         background:#ddd;
+     }
+
+.container-2-box {
+         flex-basis: 12%;
+     }
+
+
+a {
+  color: rgb(16, 129, 22);
+  font-family: helvetica;
+  text-decoration: none;
+  /* text-transform: uppercase; */
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:active {
+  color: red;
+}
+
+a:visited {
+  color: #800080;
+}
+
+
+@media all and (min-width: 500px) {
+    #header > h1 {
+        top: 20px;
+        font-size: 30px;
+        text-shadow: black;
+    }
+}
+
+@media print and (-webkit-min-device-pixel-ratio:0) {
+    header h1 {
+        /* color: #FFF !important; */
+        text-shadow: black;
+        -webkit-print-color-adjust: exact !important;
+    }
+}
+@media only screen and (max-width: 500px)  {
+  .img-responsive {
+    max-width: 150px;
+    height: 150px;
+}
+}
+
+
+@media print {
+    * {
+        background: transparent !important;
+        /* color: black !important; */
+        filter: none !important;
+        -ms-filter: none !important;
+    }
+    @page {
+margin: 0.5cm;
+}
+    body {
+        font-size: 10pt; /* why?  font-size: 12pt; casue freezing when Print Preview in IE*/
+        max-width: 100%;
+        /* font: 12pt Georgia, "Times New Roman", Times, serif; */
+        /* line-height: 1; */
+    }
+
+    a, a:visited {
+        text-decoration: underline;
+    }
+
+    hr {
+        visibility: visible;
+        page-break-before: avoid;
+    }
+    .bkMark-hide {
+        display: none;
+    }
+    pre, blockquote {
+        padding-right: 1em;
+        page-break-inside: avoid;
+    }
+    /* lists and images,here  plot1-6 from being split across multiple pages */
+    tr, img, #plot1, #plot2, #plot3, #plot4, #plot5, #plot6 {  
+        page-break-inside: avoid;
+    }
+
+    img {
+        page-break-before: always;
+        max-width: 100% !important;
+    }
+
+    p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h1, h2, h3 {
+        page-break-after: avoid;
+    }
+
+    .h1sub {
+        top: -500px;
+        color: #575757;
+        text-align: center;
+        font-weight: normal;
+        display: block;
+		max-width: 540px;
+    }
+
+    .caption {
+        text-align: center;
+        margin-bottom: 5px;
+        font-size: 0.8em;
+        padding: 5px;
+        font-weight: bold;
+        width: 75%;
+    }
+    
+    th {
+        background-color : #539342;
+        color : white;
+        font-weight : bold;
+        padding : 5px 5px;
+        text-align : center;
+        overflow-wrap : break-word;
+        border: 1px solid black;
+    }
+    
+    td {
+        background-color : rgb(238, 238, 238);
+        color : rgb(111, 111, 111);
+        padding : 5px 5px;
+        border: 1px solid black;
+    }
+    
+    .flat-table {
+        display: block;
+        font-family: sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: 115%;
+        overflow: hidden;
+        width: auto;
+        max-width: 595px;
+        border: 1px solid black;
+    }
+
+    .dataTable {
+        width: auto;
+        margin: 0 auto;
+        clear: both;
+        border-collapse: collapse;
+        border-spacing: 0;
+        max-width: 595px;
+        border: 1px solid black;
+    }
+
+    table.dataTable {
+    width : auto;
+    margin : 0 auto;
+    clear : both;
+    border-collapse : collapse;
+    border-spacing : 0;
+    border: 1px solid black;
+    max-width : 595px;
+    }
+    
+    table {
+    display: table;
+    border-collapse: collapse;
+    border-spacing: 2px;
+    }
+}
+</style>
+
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css"></link>
+<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+
+</head>
+
+<body>
+<header id="header"> <a id="pagetop"></a>
+<!-- <img src="https://cdn.pixabay.com/photo/2014/08/26/20/08/eye-428390_1280.jpg" class="img-responsive" alt="" 
+width="1000" height="300" /> -->
+<img src="eye-428390_1280.jpg" class="img-responsive" alt="" 
+width="1000" height="300" />
+<h1>  Asset Performance Report <br/>  from (human) sensor data: <br/> </h1> 
+<h2>  5-Year Trend, 5 Market Segments <br/> <br/>
+
+
+    &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp;Created by: Dong Wang
+</h2>
+</header>
+
+<hr>
+
+<h2> About this report </h2>
+<h3> Context </h3>
+<p>  We have a set of around 700 at-place
+    counter devices (sensors) located across the country-mostly. It allows 
+     a representative sample of the five main types to be reported upon: Cat-1,
+     Cat-2, Cat-3, Cat-4, Cat-5.
+</p>
+<h3> Purpose </h3>
+<!-- <div class="message-body content"> -->
+      
+<!-- <ul style="margin-top: 0px;">
+    
+</ul>
+</div> -->
+
+<div class="content">
+        <ol type="I">
+            <li>To improve the quality of utilisation performance measures as required for the Investor Confidence Rating </li>
+            </br>
+            <li>To inform Company decision making </li>
+        </ol>
+</div>
+
+
+
+<h2> Market Segments </h2>
+
+
+
+<div class="container-2">
+        <div class="container-2-box">
+                <h4><a href="#BackcountryTag">Cat-1</a></h4>
+        </div>
+        <div class="container-2-box">
+                <h4><a href="#CycleTrailsTag">Cat-2</a></h4>
+        </div>
+        <div class="container-2-box">
+                <h4><a href="#DayWalksTag">Cat-3</a></h4>
+        </div>
+        <div class="container-2-box">
+                <h4><a href="#GreatWalksTag">Cat-4</a></h4>
+        </div>
+        <div class="container-2-box">
+                <h4><a href="#ShortWalksTag">Cat-5</a></h4>
+        </div>
+    </div>
+
+
+<hr>
+
+
+
+
+
+<div class="page-break"></div>
+<div class="page-break"></div>
+<h2> <a name = "BackcountryTag"></a>Cat-1 </h2>
+
+<div id = "plot1" class="myplot" ></div>    
+<p style = "margin-bottom: 0px"><strong>Figure 1:</strong> Yearly counts: the average (mean) and 95% confidence interval estimation over time <br>
+
+
+<hr>
+<div class="page-break"></div>
+
+<h3> Annual human numbers </h3>
+<div class="chunk" id="AmICompiling"><div class="rcode"><table>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> siteClass </th>
+   <th style="text-align:left;"> Fyear </th>
+   <th style="text-align:right;"> siteNum </th>
+   <th style="text-align:right;"> Mean </th>
+   <th style="text-align:right;"> Upper </th>
+   <th style="text-align:right;"> Lower </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Cat-1 </td>
+   <td style="text-align:left;"> 2013/14 </td>
+   <td style="text-align:right;"> 74 </td>
+   <td style="text-align:right;"> 2697 </td>
+   <td style="text-align:right;"> 3514 </td>
+   <td style="text-align:right;"> 1880 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-1 </td>
+   <td style="text-align:left;"> 2014/15 </td>
+   <td style="text-align:right;"> 74 </td>
+   <td style="text-align:right;"> 2943 </td>
+   <td style="text-align:right;"> 3939 </td>
+   <td style="text-align:right;"> 1947 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-1 </td>
+   <td style="text-align:left;"> 2015/16 </td>
+   <td style="text-align:right;"> 74 </td>
+   <td style="text-align:right;"> 3370 </td>
+   <td style="text-align:right;"> 4443 </td>
+   <td style="text-align:right;"> 2297 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-1 </td>
+   <td style="text-align:left;"> 2016/17 </td>
+   <td style="text-align:right;"> 74 </td>
+   <td style="text-align:right;"> 3458 </td>
+   <td style="text-align:right;"> 4508 </td>
+   <td style="text-align:right;"> 2408 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-1 </td>
+   <td style="text-align:left;"> 2017/18 </td>
+   <td style="text-align:right;"> 74 </td>
+   <td style="text-align:right;"> 3179 </td>
+   <td style="text-align:right;"> 4267 </td>
+   <td style="text-align:right;"> 2092 </td>
+  </tr>
+</tbody>
+</table>
+
+</div></div>
+<strong>Notes:</strong></p>
+<ul style="margin-top: 0px;">
+    <li> siteNum: Number of counters included in reporting </li>
+    <li>Mean: the averaged count recorded across counters </li>
+    <li>Upper and Lower: upper and lower bound of 95% confidence intervals estimated for the mean</li>
+</ul>
+
+<hr>
+<div class="page-break"></div>
+<br>
+<p class="bkMark-hide"><a href="#pagetop">Back to top</a></p>
+
+
+
+<h2> <a name = "CycleTrailsTag"></a>Cat-2 </h2>
+
+<div id = "plot2" class="myplot"></div>    
+<p style = "margin-bottom: 0px"><strong>Figure 2:</strong> Yearly counts: the average (mean) and 95% confidence interval estimation over time <br>
+
+
+<hr>
+<div class="page-break"></div>
+
+<h3> Annual human numbers</h3>
+<div class="chunk" id="unnamed-chunk-1"><div class="rcode"><table>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> siteClass </th>
+   <th style="text-align:left;"> Fyear </th>
+   <th style="text-align:right;"> siteNum </th>
+   <th style="text-align:right;"> Mean </th>
+   <th style="text-align:right;"> Upper </th>
+   <th style="text-align:right;"> Lower </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Cat-2 </td>
+   <td style="text-align:left;"> 2013/14 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:right;"> 7548 </td>
+   <td style="text-align:right;"> 15619 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-2 </td>
+   <td style="text-align:left;"> 2014/15 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:right;"> 7688 </td>
+   <td style="text-align:right;"> 15590 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-2 </td>
+   <td style="text-align:left;"> 2015/16 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:right;"> 7005 </td>
+   <td style="text-align:right;"> 14776 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-2 </td>
+   <td style="text-align:left;"> 2016/17 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:right;"> 6865 </td>
+   <td style="text-align:right;"> 14368 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-2 </td>
+   <td style="text-align:left;"> 2017/18 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:right;"> 7935 </td>
+   <td style="text-align:right;"> 14804 </td>
+   <td style="text-align:right;"> 1066 </td>
+  </tr>
+</tbody>
+</table>
+
+</div></div>
+<strong>Notes:</strong></p>
+<ul style="margin-top: 0px;">
+    <li> siteNum: Number of counters included in reporting </li>
+    <li>Mean: the averaged count recorded across counters </li>
+    <li>Upper and Lower: upper and lower bound of 95% confidence intervals estimated for the mean</li>
+</ul>
+<hr>
+<div class="page-break"></div>
+<br>
+<p class="bkMark-hide"><a href="#pagetop">Back to top</a></p>
+
+<h2> <a name = "DayWalksTag"></a>Cat-3 </h2>
+<div id = "plot3" class="myplot"></div>    
+<p style = "margin-bottom: 0px"><strong>Figure 3:</strong> Yearly counts: the average (mean) and 95% confidence interval estimation over time <br>
+
+
+<hr>
+<div class="page-break"></div>
+
+<h3> Annual human numbers</h3>
+<div class="chunk" id="unnamed-chunk-2"><div class="rcode"><table>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> siteClass </th>
+   <th style="text-align:left;"> Fyear </th>
+   <th style="text-align:right;"> siteNum </th>
+   <th style="text-align:right;"> Mean </th>
+   <th style="text-align:right;"> Upper </th>
+   <th style="text-align:right;"> Lower </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Cat-3 </td>
+   <td style="text-align:left;"> 2013/14 </td>
+   <td style="text-align:right;"> 7 </td>
+   <td style="text-align:right;"> 13402 </td>
+   <td style="text-align:right;"> 26026 </td>
+   <td style="text-align:right;"> 778 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-3 </td>
+   <td style="text-align:left;"> 2014/15 </td>
+   <td style="text-align:right;"> 7 </td>
+   <td style="text-align:right;"> 12366 </td>
+   <td style="text-align:right;"> 18498 </td>
+   <td style="text-align:right;"> 6235 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-3 </td>
+   <td style="text-align:left;"> 2015/16 </td>
+   <td style="text-align:right;"> 7 </td>
+   <td style="text-align:right;"> 11020 </td>
+   <td style="text-align:right;"> 13331 </td>
+   <td style="text-align:right;"> 8710 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-3 </td>
+   <td style="text-align:left;"> 2016/17 </td>
+   <td style="text-align:right;"> 7 </td>
+   <td style="text-align:right;"> 14593 </td>
+   <td style="text-align:right;"> 23702 </td>
+   <td style="text-align:right;"> 5484 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-3 </td>
+   <td style="text-align:left;"> 2017/18 </td>
+   <td style="text-align:right;"> 7 </td>
+   <td style="text-align:right;"> 18109 </td>
+   <td style="text-align:right;"> 38186 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+</tbody>
+</table>
+
+</div></div>
+<strong>Notes:</strong></p>
+<ul style="margin-top: 0px;">
+    <li> siteNum: Number of counters included in reporting </li>
+    <li>Mean: the averaged count recorded across counters </li>
+    <li>Upper and Lower: upper and lower bound of 95% confidence intervals estimated for the mean</li>
+</ul>
+<hr>
+<div class="page-break"></div>
+<br>
+<p class="bkMark-hide"><a href="#pagetop">Back to top</a></p>
+
+<h2> <a name = "GreatWalksTag"></a>Cat-4 </h2>
+<div id = "plot4" class="myplot"></div>    
+<p style = "margin-bottom: 0px"><strong>Figure 4:</strong> Yearly counts: the average (mean) and 95% confidence interval estimation over time <br>
+
+
+<hr>
+<div class="page-break"></div>
+
+<h3> Annual human numbers</h3>
+<div class="chunk" id="unnamed-chunk-3"><div class="rcode"><table>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> siteClass </th>
+   <th style="text-align:left;"> Fyear </th>
+   <th style="text-align:right;"> siteNum </th>
+   <th style="text-align:right;"> Mean </th>
+   <th style="text-align:right;"> Upper </th>
+   <th style="text-align:right;"> Lower </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Cat-4 </td>
+   <td style="text-align:left;"> 2013/14 </td>
+   <td style="text-align:right;"> 12 </td>
+   <td style="text-align:right;"> 23204 </td>
+   <td style="text-align:right;"> 39573 </td>
+   <td style="text-align:right;"> 6835 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-4 </td>
+   <td style="text-align:left;"> 2014/15 </td>
+   <td style="text-align:right;"> 12 </td>
+   <td style="text-align:right;"> 25887 </td>
+   <td style="text-align:right;"> 43126 </td>
+   <td style="text-align:right;"> 8649 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-4 </td>
+   <td style="text-align:left;"> 2015/16 </td>
+   <td style="text-align:right;"> 12 </td>
+   <td style="text-align:right;"> 29847 </td>
+   <td style="text-align:right;"> 49441 </td>
+   <td style="text-align:right;"> 10252 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-4 </td>
+   <td style="text-align:left;"> 2016/17 </td>
+   <td style="text-align:right;"> 12 </td>
+   <td style="text-align:right;"> 32649 </td>
+   <td style="text-align:right;"> 54260 </td>
+   <td style="text-align:right;"> 11039 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-4 </td>
+   <td style="text-align:left;"> 2017/18 </td>
+   <td style="text-align:right;"> 12 </td>
+   <td style="text-align:right;"> 35343 </td>
+   <td style="text-align:right;"> 58180 </td>
+   <td style="text-align:right;"> 12505 </td>
+  </tr>
+</tbody>
+</table>
+
+</div></div>
+<strong>Notes:</strong></p>
+<ul style="margin-top: 0px;">
+    <li> siteNum: Number of counters included in reporting </li>
+    <li>Mean: the averaged count recorded across counters </li>
+    <li>Upper and Lower: upper and lower bound of 95% confidence intervals estimated for the mean</li>
+</ul>
+<hr>
+<div class="page-break"></div>
+<br>
+<p class="bkMark-hide"><a href="#pagetop">Back to top</a></p>
+
+<h2> <a name = "ShortWalksTag"></a>Cat-5 </h2>
+<div id = "plot5" class="myplot"></div>    
+<p style = "margin-bottom: 0px"><strong>Figure 5:</strong> Yearly counts: the average (mean) and 95% confidence interval estimation over time <br>
+
+
+<hr>
+<div class="page-break"></div>
+
+<h3> Annual huamn numbers</h3>
+<div class="chunk" id="unnamed-chunk-4"><div class="rcode"><table>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> siteClass </th>
+   <th style="text-align:left;"> Fyear </th>
+   <th style="text-align:right;"> siteNum </th>
+   <th style="text-align:right;"> Mean </th>
+   <th style="text-align:right;"> Upper </th>
+   <th style="text-align:right;"> Lower </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Cat-5 </td>
+   <td style="text-align:left;"> 2013/14 </td>
+   <td style="text-align:right;"> 13 </td>
+   <td style="text-align:right;"> 47154 </td>
+   <td style="text-align:right;"> 89247 </td>
+   <td style="text-align:right;"> 5061 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-5 </td>
+   <td style="text-align:left;"> 2014/15 </td>
+   <td style="text-align:right;"> 13 </td>
+   <td style="text-align:right;"> 41591 </td>
+   <td style="text-align:right;"> 71151 </td>
+   <td style="text-align:right;"> 12031 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-5 </td>
+   <td style="text-align:left;"> 2015/16 </td>
+   <td style="text-align:right;"> 13 </td>
+   <td style="text-align:right;"> 52346 </td>
+   <td style="text-align:right;"> 98881 </td>
+   <td style="text-align:right;"> 5810 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-5 </td>
+   <td style="text-align:left;"> 2016/17 </td>
+   <td style="text-align:right;"> 13 </td>
+   <td style="text-align:right;"> 55922 </td>
+   <td style="text-align:right;"> 96134 </td>
+   <td style="text-align:right;"> 15710 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Cat-5 </td>
+   <td style="text-align:left;"> 2017/18 </td>
+   <td style="text-align:right;"> 13 </td>
+   <td style="text-align:right;"> 53948 </td>
+   <td style="text-align:right;"> 88949 </td>
+   <td style="text-align:right;"> 18946 </td>
+  </tr>
+</tbody>
+</table>
+
+</div></div>
+<strong>Notes:</strong></p>
+<ul style="margin-top: 0px;">
+    <li>siteNum: Number of counters included in reporting </li>
+    <li>Mean: the averaged count recorded across counters </li>
+    <li>Upper and Lower: upper and lower bound of 95% confidence intervals estimated for the mean</li>
+</ul>
+<hr>
+<div class="page-break"></div>
+
+
+
+<br>
+<p class="bkMark-hide"><a href="#pagetop">Back to top</a></p>
+<h2> Data Quality </h2>
+<strong>Notes:</strong></p>
+<ul style="margin-top: 0px;">
+<li>This report only includes counters which have valid records from 2013-07-01 00:00:00 to 2018-06-30 23:00:00 </li>
+<li>95% Upper and Lower confidence intervals are good estimations only when siteNum: Number of counters included in reporting is large enough (>50) </li>
+
+</ul>
+
+<p>
+        This report uses <strong>uncalibrated counter data</strong>; i.e. the number of times the counter sensor has been triggered by a person. 
+        Uncalibrated counter data must not be used to indicate the number huamns to a place. 
+        
+        
+</p>
+
+<p style="text-align: center; width:595px;padding:10px;border:1px dotted black;clear:left;"> <font size=1.5px> 
+
+
+
+    <strong>Report created by:</strong> Dong Wang<br>
+    <strong>Requests:</strong> File an Assyst request to get more detailed information. <br>
+	<strong>Help improve this report:</strong> This Asset Utilisation Report is a work-in-progress, and we welcome your feedback.<br>
+	Please forward your comments to <a href="mailto:dongwangchch@gmail.com">dongwangchch@gmail.com</a> subject: Counters</font>
+</p>
+
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+
+<script >
+document.getElementById("hidecode").style.display = "none";
+</script>
+
+<script>
+var siteClass01 = "BackCountry";
+var x_fig01 = ["2013/14","2014/15","2015/16","2016/17","2017/18"];
+var y_fig01 = [2697,2943,3370,3458,3179];
+var y_Upper01 = [3514,3939,4443,4508,4267];
+var y_Lower01 = [1880,1947,2297,2408,2092];
+</script>
+
+<script>
+
+    /*
+    Build the first graph, note I can not change the order in var data = [trace1, trace2, trace3]; 
+    */
+    var trace1 = {
+  x: x_fig01, 
+  y: y_fig01, 
+//   line: {width: 6}, // dont do this, will not work
+  line: {color: "red", width: 4}, 
+  marker: {color: "red", size: 10}, 
+  mode: "lines+markers", 
+  name: "Mean Count", 
+//   showlegend: true,
+  type: "scatter"
+};
+
+var trace2 = {
+  x: x_fig01, 
+  y: y_Lower01,
+  fill: "tonexty", 
+  fillcolor: "rgba(68, 68, 68, 0.1)", 
+//   line: {width: 0}, this can remove the boundary line
+//   marker: {color: "444"}, 
+  mode: "lines", 
+  name: "95% Lower Bound", 
+  visible: 'legendonly',
+//   showlegend: true,
+  type: "scatter"
+};
+var trace3 = {
+   x: x_fig01, 
+   y: y_Upper01,
+  fill: "tonexty", 
+  fillcolor: "rgba(68, 68, 68, 0.1)", 
+
+  mode: "lines", 
+  name: "95% Upper Bound", 
+  visible: 'legendonly',
+//   showlegend: true,
+  type: "scatter"
+};
+
+var data = [trace1, trace2, trace3];
+var layout = {
+//   showlegend: true, 
+  title: "Yearly Visiting Activity for Category " + siteClass01, 
+  yaxis: {title: "Yearly Visiting Activity"},
+  xaxis: {title: "Finacial Year"}
+};
+
+
+    Plotly.newPlot('plot1', data,layout);
+// console.log(y_CI01);
+</script>
+
+
+<!-- Plot multiple years on top of each other
+plot 2 -->
+<script>
+    var siteClass02 = "Bicycle";
+    var x_fig02 = ["2013/14","2014/15","2015/16","2016/17","2017/18"];
+    var y_fig02 = [7548,7688,7005,6865,7935];
+    var y_Upper02 = [15619,15590,14776,14368,14804];
+    var y_Lower02 = [0,0,0,0,1066];
+    </script>
+    
+    <script>
+    
+        /*
+        Build the second graph, note I can not change the order in var data = [trace1, trace2, trace3]; 
+        */
+        var trace1 = {
+      x: x_fig02, 
+      y: y_fig02, 
+    //   line: {width: 6}, // dont do this, will not work
+      line: {color: "red", width: 4}, 
+      marker: {color: "red", size: 10}, 
+      mode: "lines+markers", 
+      name: "Mean Count", 
+    //   showlegend: true,
+      type: "scatter"
+    };
+    
+    var trace2 = {
+      x: x_fig02, 
+      y: y_Lower02,
+      fill: "tonexty", 
+      fillcolor: "rgba(68, 68, 68, 0.1)", 
+    //   line: {width: 0}, this can remove the boundary line
+    //   marker: {color: "444"}, 
+      mode: "lines", 
+      name: "95% Lower Bound", 
+      visible: 'legendonly',
+    //   showlegend: true,
+      type: "scatter"
+    };
+    var trace3 = {
+       x: x_fig02, 
+       y: y_Upper02,
+      fill: "tonexty", 
+      fillcolor: "rgba(68, 68, 68, 0.1)", 
+    
+      mode: "lines", 
+      name: "95% Upper Bound", 
+      visible: 'legendonly',
+    //   showlegend: true,
+      type: "scatter"
+    };
+    
+    var data = [trace1, trace2, trace3];
+    var layout = {
+    //   showlegend: true, 
+      title: "Yearly Visiting Activity for Category " + siteClass02, 
+      yaxis: {title: "Yearly Visiting Activity"},
+      xaxis: {title: "Finacial Year"}
+    };
+    
+    
+        Plotly.newPlot('plot2', data,layout);
+    // console.log(y_CI01);
+    </script>
+    
+
+<!-- Plot multiple years on top of each other
+plot 3 -->
+<script>
+    var siteClass03 = "DayHike";
+    var x_fig03 = ["2013/14","2014/15","2015/16","2016/17","2017/18"];
+    var y_fig03 = [13402,12366,11020,14593,18109];
+    var y_Upper03 = [26026,18498,13331,23702,38186];
+    var y_Lower03 = [778,6235,8710,5484,0];
+    </script>
+    
+    <script>
+    
+        /*
+        Build the second graph, note I can not change the order in var data = [trace1, trace2, trace3]; 
+        */
+        var trace1 = {
+      x: x_fig03, 
+      y: y_fig03, 
+    //   line: {width: 6}, // dont do this, will not work
+      line: {color: "red", width: 4}, 
+      marker: {color: "red", size: 10}, 
+      mode: "lines+markers", 
+      name: "Mean Count", 
+    //   showlegend: true,
+      type: "scatter"
+    };
+    
+    var trace2 = {
+      x: x_fig03, 
+      y: y_Lower03,
+      fill: "tonexty", 
+      fillcolor: "rgba(68, 68, 68, 0.1)", 
+    //   line: {width: 0}, this can remove the boundary line
+    //   marker: {color: "444"}, 
+      mode: "lines", 
+      name: "95% Lower Bound", 
+      visible: 'legendonly',
+    //   showlegend: true,
+      type: "scatter"
+    };
+    var trace3 = {
+       x: x_fig03, 
+       y: y_Upper03,
+      fill: "tonexty", 
+      fillcolor: "rgba(68, 68, 68, 0.1)", 
+    
+      mode: "lines", 
+      name: "95% Upper Bound", 
+      visible: 'legendonly',
+    //   showlegend: true,
+      type: "scatter"
+    };
+    
+    var data = [trace1, trace2, trace3];
+    var layout = {
+    //   showlegend: true, 
+      title: "Yearly Visiting Activity for Category " + siteClass03, 
+      yaxis: {title: "Yearly Visiting Activity"},
+      xaxis: {title: "Finacial Year"}
+    };
+    
+    
+        Plotly.newPlot('plot3', data,layout);
+    // console.log(y_CI01);
+    </script>
+
+    <!-- Plot multiple years on top of each other
+plot 4 -->
+<script>
+    var siteClass04 = "GreatWalk";
+    var x_fig04 = ["2013/14","2014/15","2015/16","2016/17","2017/18"];
+    var y_fig04 = [23204,25887,29847,32649,35343];
+    var y_Upper04 = [39573,43126,49441,54260,58180];
+    var y_Lower04 = [6835,8649,10252,11039,12505];
+    </script>
+    
+    <script>
+    
+        /*
+        Build the second graph, note I can not change the order in var data = [trace1, trace2, trace3]; 
+        */
+        var trace1 = {
+      x: x_fig04, 
+      y: y_fig04, 
+    //   line: {width: 6}, // dont do this, will not work
+      line: {color: "red", width: 4}, 
+      marker: {color: "red", size: 10}, 
+      mode: "lines+markers", 
+      name: "Mean Count", 
+    //   showlegend: true,
+      type: "scatter"
+    };
+    
+    var trace2 = {
+      x: x_fig04, 
+      y: y_Lower04,
+      fill: "tonexty", 
+      fillcolor: "rgba(68, 68, 68, 0.1)", 
+    //   line: {width: 0}, this can remove the boundary line
+    //   marker: {color: "444"}, 
+      mode: "lines", 
+      name: "95% Lower Bound", 
+      visible: 'legendonly',
+    //   showlegend: true,
+      type: "scatter"
+    };
+    var trace3 = {
+       x: x_fig04, 
+       y: y_Upper04,
+      fill: "tonexty", 
+      fillcolor: "rgba(68, 68, 68, 0.1)", 
+    
+      mode: "lines", 
+      name: "95% Upper Bound", 
+      visible: 'legendonly',
+    //   showlegend: true,
+      type: "scatter"
+    };
+    
+    var data = [trace1, trace2, trace3];
+    var layout = {
+    //   showlegend: true, 
+      title: "Yearly Visiting Activity for Category " + siteClass04, 
+      yaxis: {title: "Yearly Visiting Activity"},
+      xaxis: {title: "Finacial Year"}
+    };
+    
+    
+        Plotly.newPlot('plot4', data,layout);
+    // console.log(y_CI01);
+    </script>
+
+        <!-- Plot multiple years on top of each other
+plot 5 -->
+<script>
+    var siteClass05 = "ShortWalk";
+    var x_fig05 = ["2013/14","2014/15","2015/16","2016/17","2017/18"];
+    var y_fig05 = [47154,41591,52346,55922,53948];
+    var y_Upper05 = [89247,71151,98881,96134,88949];
+    var y_Lower05 = [5061,12031,5810,15710,18946];
+    </script>
+    
+    <script>
+    
+        /*
+        Build the second graph, note I can not change the order in var data = [trace1, trace2, trace3]; 
+        */
+        var trace1 = {
+      x: x_fig05, 
+      y: y_fig05, 
+    //   line: {width: 6}, // dont do this, will not work
+      line: {color: "red", width: 4}, 
+      marker: {color: "red", size: 10}, 
+      mode: "lines+markers", 
+      name: "Mean Count", 
+    //   showlegend: true,
+      type: "scatter"
+    };
+    
+    var trace2 = {
+      x: x_fig05, 
+      y: y_Lower05,
+      fill: "tonexty", 
+      fillcolor: "rgba(68, 68, 68, 0.1)", 
+    //   line: {width: 0}, this can remove the boundary line
+    //   marker: {color: "444"}, 
+      mode: "lines", 
+      name: "95% Lower Bound", 
+      visible: 'legendonly',
+    //   showlegend: true,
+      type: "scatter"
+    };
+    var trace3 = {
+       x: x_fig05, 
+       y: y_Upper05,
+      fill: "tonexty", 
+      fillcolor: "rgba(68, 68, 68, 0.1)", 
+    
+      mode: "lines", 
+      name: "95% Upper Bound", 
+      visible: 'legendonly',
+    //   showlegend: true,
+      type: "scatter"
+    };
+    
+    var data = [trace1, trace2, trace3];
+    var layout = {
+    //   showlegend: true, 
+      title: "Yearly Visiting Activity for Category " + siteClass05, 
+      yaxis: {title: "Yearly Visiting Activity"},
+      xaxis: {title: "Finacial Year"}
+    };
+    
+    
+        Plotly.newPlot('plot5', data,layout);
+    // console.log(y_CI01);
+    </script>
+    </body>  
+
